@@ -1,5 +1,5 @@
 import React, {
-  useState, ChangeEvent, useCallback, useMemo,
+  useState, ChangeEvent, useMemo,
 } from 'react';
 import { peopleFromServer } from './data/people';
 import { debounce } from './utils';
@@ -12,25 +12,20 @@ export const App: React.FC = () => {
   const [isDropdown, setIsDropdown] = useState(false);
   const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
 
-  const applyQuery = useCallback(debounce(setAppliedQuery, 1000), []);
+  const applyQuery = useMemo(() => debounce(setAppliedQuery, 1000), []);
 
   const handleQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
     applyQuery(event.target.value);
   };
 
-  const onFocus = () => {
-    setIsDropdown(true);
-  };
+  const onFocus = () => setIsDropdown(true);
 
-  const onBlur = () => {
-    setTimeout(() => {
-      setIsDropdown(false);
-    }, 200);
-  };
+  const onBlur = () => setIsDropdown(false);
 
   const onSelect = (person: Person) => () => {
     setSelectedPerson(person);
+    setQuery(person.name);
   };
 
   const filteredPeople = useMemo(() => {
@@ -71,7 +66,7 @@ export const App: React.FC = () => {
                 <div
                   className="dropdown-item"
                   key={person.slug}
-                  onClick={onSelect(person)}
+                  onMouseDown={onSelect(person)}
                   role="presentation"
                 >
                   <p className="has-text-link">{person.name}</p>
