@@ -1,6 +1,7 @@
 import React, {
   useState, ChangeEvent, useMemo,
 } from 'react';
+import cn from 'classnames';
 import { peopleFromServer } from './data/people';
 import { debounce } from './utils';
 import { Person } from './types/Person';
@@ -46,7 +47,7 @@ export const App: React.FC = () => {
           : 'No selected person'}
       </h1>
 
-      <div className="dropdown is-active">
+      <div className={cn('dropdown', { 'is-active': isDropdown })}>
         <div className="dropdown-trigger">
           <input
             type="text"
@@ -59,28 +60,26 @@ export const App: React.FC = () => {
           />
         </div>
 
-        {isDropdown && (
-          <div className="dropdown-menu" role="menu">
-            <div className="dropdown-content">
-              {filteredPeople.length ? filteredPeople.map((person) => (
-                <div
-                  className="dropdown-item"
-                  key={person.slug}
-                  onMouseDown={onSelect(person)}
-                  role="presentation"
-                >
-                  <p className="has-text-link">{person.name}</p>
-                </div>
-              )) : (
-                <div
-                  className="dropdown-item"
-                >
-                  <p className="has-text-link">No matching suggestions</p>
-                </div>
-              )}
-            </div>
+        <div className="dropdown-menu" role="menu">
+          <div className="dropdown-content">
+            {filteredPeople.length ? filteredPeople.map((person) => (
+              <div
+                className="dropdown-item"
+                key={person.slug}
+                onMouseDown={onSelect(person)}
+                role="presentation"
+              >
+                <p className="has-text-link">{person.name}</p>
+              </div>
+            )) : (
+              <div
+                className="dropdown-item"
+              >
+                <p className="has-text-link">No matching suggestions</p>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </main>
   );
